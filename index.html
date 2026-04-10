@@ -173,6 +173,7 @@ button.send:hover {
 <body>
 
 <header>Państwowe Ratownictwo Medyczne</header>
+
 <nav>
 <button onclick="openTab('lek')">Badania lekarskie</button>
 <button onclick="openTab('mp')">Medycyna pracy</button>
@@ -190,6 +191,7 @@ button.send:hover {
 <audio id="sendSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
 
 <script>
+/* WEBHOOKI */
 const W_LEK="https://discord.com/api/webhooks/1480275580279722125/6rnHYb77BAgd8UEmOBkF1xKZooS25RNVkwVb55WRtmeG-jSgkGHBWNQdROhbx2VnkDnZ";
 const W_MP="https://discord.com/api/webhooks/1480275725964541983/J03cqAUnqGZhhsXNP71I9CtiRlknwoFYTa2oCo_3hXOMZPbJE06L6dBlPqWLxAVXiCNf";
 const W_PSYCH1="https://discord.com/api/webhooks/1480275894789472256/Dya-OtNlKCjmF7_yr49xfi4f4wKMgTURNzYJb7zDHJfmDsQeCTrVaRPzpZ27ZXez8JL6";
@@ -209,26 +211,51 @@ function openTab(id){
   document.getElementById(id).classList.add('active');
 }
 
-function sendForm(e,webhooks,title,colors){
+/* ZAAWANSOWANA FUNKCJA WYSYŁANIA EMBEDÓW */
+function sendForm(e, webhooks, title, colors) {
   e.preventDefault();
-  const form=e.target;
-  let values="";
-  form.querySelectorAll("label").forEach(label=>{
-    let input=label.nextElementSibling;
-    if(input){
-      values+=label.innerText+": "+(input.value||"Brak")+"\n";
+  const form = e.target;
+  let fields = [];
+
+  form.querySelectorAll("label").forEach(label => {
+    let input = label.nextElementSibling;
+    if (input && input.value) {
+      // Jeśli pole jest długie (np. textarea), ustawiamy inline na false
+      const isLong = input.tagName === "TEXTAREA" || input.value.length > 35;
+      
+      fields.push({
+        name: `🔹 ${label.innerText}`,
+        value: `\`\`\`${input.value}\`\`\``, // Wartość w bloku kodu dla czytelności
+        inline: !isLong
+      });
     }
   });
-  webhooks.forEach((webhook,i)=>{
-    fetch(webhook,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({embeds:[{title:title,description:values,color:colors[i]||16711680}]})
+
+  webhooks.forEach((webhook, i) => {
+    fetch(webhook, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        embeds: [{
+          title: `📋 ${title.toUpperCase()}`,
+          color: colors[i] || 16711680,
+          fields: fields,
+          timestamp: new Date().toISOString(),
+          footer: {
+            text: "System Zarządzania PRM • Tablet v2.0",
+            icon_url: "https://i.imgur.com/ArY8ZUn.png"
+          }
+        }]
+      })
     });
   });
-  form.querySelector(".success").innerText="Wysłano!";
+
+  const successDiv = form.querySelector(".success");
+  successDiv.innerText = "✓ Raport wysłany pomyślnie";
   document.getElementById("sendSound").play();
   form.reset();
+  
+  setTimeout(() => { successDiv.innerText = ""; }, 5000);
 }
 </script>
 
@@ -244,7 +271,7 @@ function sendForm(e,webhooks,title,colors){
 <label>Osoba wykonująca</label><input required>
 <label>Stan zdrowia</label><textarea></textarea>
 <label>Wynik badania</label><select required><option>Pozytywny</option><option>Negatywny</option></select>
-<button class="send">WYŚLIJ</button>
+<button class="send">ZATWIERDŹ RAPORT</button>
 <div class="success"></div>
 </form>
 </div>
@@ -262,7 +289,7 @@ function sendForm(e,webhooks,title,colors){
 <label>Osoba wykonująca</label><input required>
 <label>Stan zdrowia</label><textarea></textarea>
 <label>Wynik badania</label><select required><option>Pozytywny</option><option>Negatywny</option></select>
-<button class="send">WYŚLIJ</button>
+<button class="send">ZATWIERDŹ RAPORT</button>
 <div class="success"></div>
 </form>
 </div>
@@ -275,15 +302,11 @@ function sendForm(e,webhooks,title,colors){
 <label>Imię i nazwisko pacjenta</label><input required>
 <label>Data urodzenia</label><input type="date" required>
 <label>Pesel / ID Roblox</label><input required>
-<label>Data badania</label><input type="date" required>
-<label>Miejsce badania</label><input required>
-<label>Osoba wykonująca</label><input required>
 <label>Odporność na stres</label><select><option>Niska</option><option>Średnia</option><option>Wysoka</option></select>
 <label>Stabilność emocjonalna</label><select><option>Niska</option><option>Średnia</option><option>Wysoka</option></select>
 <label>Impulsywność</label><select><option>Tak</option><option>Nie</option></select>
-<label>Empatia</label><select><option>Niska</option><option>Średnia</option><option>Wysoka</option></select>
 <label>Wynik</label><select required><option>Brak przeciwwskazań</option><option>Istnieją przeciwwskazania</option></select>
-<button class="send">WYŚLIJ</button>
+<button class="send">ZATWIERDŹ RAPORT</button>
 <div class="success"></div>
 </form>
 </div>
@@ -298,7 +321,7 @@ function sendForm(e,webhooks,title,colors){
 <label>Podane leki</label><textarea></textarea>
 <label>Decyzja zespołu</label><select><option>Przyjazd do szpitala</option><option>Pozostawienie na miejscu</option></select>
 <label>Dowódca zespołu</label><input>
-<button class="send">WYŚLIJ</button>
+<button class="send">ZATWIERDŹ KMCR</button>
 <div class="success"></div>
 </form>
 </div>
@@ -311,7 +334,7 @@ function sendForm(e,webhooks,title,colors){
 <label>Imię i nazwisko</label><input>
 <label>Od której do której</label><input>
 <label>Podpis</label><input>
-<button class="send">WYŚLIJ</button>
+<button class="send">WYŚLIJ STATUS</button>
 <div class="success"></div>
 </form>
 </div>
@@ -324,7 +347,7 @@ function sendForm(e,webhooks,title,colors){
 <label>Pacjent</label><input>
 <label>Wynik kontroli</label><textarea></textarea>
 <label>Lekarz kontrolujący</label><input>
-<button class="send">WYŚLIJ</button>
+<button class="send">WYŚLIJ KONTROLĘ</button>
 <div class="success"></div>
 </form>
 </div>
@@ -337,7 +360,7 @@ function sendForm(e,webhooks,title,colors){
 <label>Imię i nazwisko</label><input>
 <label>Data zgonu</label><input type="date">
 <label>Miejsce zgonu</label><input>
-<button class="send">WYŚLIJ</button>
+<button class="send">WYSTAW AKT</button>
 <div class="success"></div>
 </form>
 </div>
@@ -349,7 +372,7 @@ function sendForm(e,webhooks,title,colors){
 <form onsubmit="sendForm(event,[W_SEKCJE1,W_SEKCJE2],'Sekcja zwłok',[16711680,65280])">
 <label>Zmarły</label><input>
 <label>Wnioski końcowe</label><textarea></textarea>
-<button class="send">WYŚLIJ</button>
+<button class="send">WYŚLIJ WYNIK</button>
 <div class="success"></div>
 </form>
 </div>
@@ -362,7 +385,7 @@ function sendForm(e,webhooks,title,colors){
 <label>Imię i Nazwisko Pacjenta</label><input>
 <label>Jaka operacja</label><input>
 <label>Przebieg operacji</label><textarea></textarea>
-<button class="send">WYŚLIJ</button>
+<button class="send">WYŚLIJ RAPORT</button>
 <div class="success"></div>
 </form>
 </div>
@@ -375,7 +398,7 @@ function sendForm(e,webhooks,title,colors){
 <label>Imię i Nazwisko pacjenta</label><input>
 <label>Do</label><input>
 <label>Treść skierowania</label><textarea></textarea>
-<button class="send">WYŚLIJ</button>
+<button class="send">WYSTAW SKIEROWANIE</button>
 <div class="success"></div>
 </form>
 </div>
@@ -387,7 +410,7 @@ function sendForm(e,webhooks,title,colors){
 <form onsubmit="sendForm(event,[W_ZALEC],'Zalecenia',[5763719])">
 <label>Imię i Nazwisko pacjenta</label><input>
 <label>Zalecam</label><textarea></textarea>
-<button class="send">WYŚLIJ</button>
+<button class="send">WYŚLIJ ZALECENIA</button>
 <div class="success"></div>
 </form>
 </div>
