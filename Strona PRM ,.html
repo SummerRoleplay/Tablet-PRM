@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tablet | PRM — Summer RP</title>
+<link rel="icon" href="./PRM.png">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --primary: #ff3b3b;
+  --primary-hover: #ff5c5c;
+  --bg-dark: #0f0f12;
+  --card-bg: #1a1a1e;
+  --input-bg: #252529;
+  --text-main: #e0e0e0;
+  --text-dim: #a0a0a5;
+  --radius: 12px;
+  --shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+/* ===== GLOBAL ===== */
+* { box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+
+body {
+  margin: 0;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  line-height: 1.6;
+  background-image: 
+    radial-gradient(circle at 0% 0%, rgba(255, 59, 59, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 100% 100%, rgba(255, 59, 59, 0.05) 0%, transparent 40%);
+  background-attachment: fixed;
+}
+
+/* ===== HEADER ===== */
+header {
+  background: rgba(26, 26, 30, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--primary);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* ===== NAV ===== */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+nav button {
+  background: var(--card-bg);
+  color: var(--text-dim);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+nav button:hover {
+  background: rgba(255, 59, 59, 0.1);
+  color: var(--primary);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* ===== TABS & CARDS ===== */
+.tab {
+  display: none;
+  padding: 20px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  max-width: 750px;
+  margin: 0 auto 50px;
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 24px;
+  color: #fff;
+  border-left: 4px solid var(--primary);
+  padding-left: 15px;
+  margin-bottom: 30px;
+}
+
+/* ===== FORM ELEMENTS ===== */
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 14px;
+  background: var(--input-bg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  color: #fff;
+  font-size: 15px;
+  margin-bottom: 25px;
+  transition: all 0.2s;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: #2d2d33;
+  box-shadow: 0 0 0 4px rgba(255, 59, 59, 0.1);
+}
+
+button.send {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 16px;
+  width: 100%;
+  border-radius: var(--radius);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(255, 59, 59, 0.3);
+}
+
+button.send:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+.success {
+  margin-top: 20px;
+  color: #00ff88;
+  text-align: center;
+  font-weight: 600;
+}
+</style>
+</head>
+
+<body>
+
+<header>Państwowe Ratownictwo Medyczne</header>
+
+<nav>
+<button onclick="openTab('lek')">Badania lekarskie</button>
+<button onclick="openTab('mp')">Medycyna pracy</button>
+<button onclick="openTab('potw')">Potwierdzenie badań</button>
+<button onclick="openTab('kmcr')">KMCR</button>
+<button onclick="openTab('dyzur')">Dyżury</button>
+<button onclick="openTab('kontrola')">Kontrola pacjenta</button>
+<button onclick="openTab('akta')">Akta zgonów</button>
+<button onclick="openTab('sekcja')">Sekcja zwłok</button>
+<button onclick="openTab('operacja')">Operacja</button>
+<button onclick="openTab('skierowania')">Skierowania</button>
+<button onclick="openTab('zalecenia')">Zalecenia</button>
+</nav>
+
+<audio id="sendSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+
+<script>
+/* WEBHOOKS */
+const W_LEK="https://discord.com/api/webhooks/1480275580279722125/6rnHYb77BAgd8UEmOBkF1xKZooS25RNVkwVb55WRtmeG-jSgkGHBWNQdROhbx2VnkDnZ";
+const W_MP="https://discord.com/api/webhooks/1480275725964541983/J03cqAUnqGZhhsXNP71I9CtiRlknwoFYTa2oCo_3hXOMZPbJE06L6dBlPqWLxAVXiCNf";
+const W_POTW="https://discord.com/api/webhooks/1436092452867149956/NChLgqn7b379Hf7WBDd0mJX_-WtpsnouApwDdSeGB39PfEjbZ109UQ0QGiExbg3pnoHd";
+const W_KMCR="https://discord.com/api/webhooks/1480276027308511367/x5e3jOG-Ac3OZavU9nexNPWcCb36rP8M6Fdu45Bd4M9ImL_-TwGZvrnH817QdNVwx5z0";
+const W_DYZUR="https://discord.com/api/webhooks/1480276290102759579/hBoSemWXnzohj_H1xAhpjJPJ5tx7WM10gGiK67xdvKLOrKIaavkjBXt4bVJVy7S3CmJi";
+const W_KONTROLA="https://discord.com/api/webhooks/1480276422613270741/vfA9Py1SlmRyTdcMjv6S4fV0ACMowXeCjNbjxdBlYkH8W1cExCCUwrg6Kl4gMkvXLD7E";
+const W_SEKCJE1="https://discord.com/api/webhooks/1480276136364871782/JzvVcwrrr4fI4LEaEBEbXWd5nwdL7qB9Jx3MrVPWSqzdEFZ0bjt8UX4Ry_L1BI28U1C0";
+const W_SEKCJE2="https://discord.com/api/webhooks/1475603174827098387/IbDxNTi8JoPsENmofqueU1uVPtIibIinUA0-hyfO-3mwoxyEKb2zgIWJ4nY7GaMAdoUS";
+const W_AKTA="https://discord.com/api/webhooks/1475607510047002687/4C-QvJyqlHUemto-7hutH66FNicOsxg4ZQ4gQsffoqoWxQG0F1pAAdrPKEVfEcg66qKS";
+const W_OPERACJA="https://discord.com/api/webhooks/1491173121506677008/ce-8YWT5TU-kzNLApfT1m31Eb-lqycbOxh9yyLbS7IoiV7PFZ1umeh6qMvCfocclaI3P";
+const W_SKIER="https://discord.com/api/webhooks/1491173120760090734/MgNSe74l8lPUdVjAumXuOsXVZcopdMj0f8c5dXxDkUoBIJMmXiboKT62Ofoclyjqt0Nn";
+const W_ZALEC="https://discord.com/api/webhooks/1491173104792109258/imLQQbCxG1c2ra50QUdqVfvpJHL3CQ1GEXS80NSwgT1jNi1skW7GJMeI8gekbMalw6CC";
+
+function openTab(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function sendForm(e,webhooks,title,colors){
+  e.preventDefault();
+  const form=e.target;
+  let values="";
+  form.querySelectorAll("label").forEach(label=>{
+    let input=label.nextElementSibling;
+    if(input){
+      values+=label.innerText+": "+(input.value||"Brak")+"\n";
+    }
+  });
+  webhooks.forEach((webhook,i)=>{
+    fetch(webhook,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({embeds:[{title:title,description:values,color:colors[i]||16711680}]})
+    });
+  });
+  form.querySelector(".success").innerText="Wysłane pomyślnie!";
+  document.getElementById("sendSound").play();
+  form.reset();
+}
+</script>
+
+<div id="lek" class="tab active">
+<div class="card">
+<h2>Badania lekarskie</h2>
+<form onsubmit="sendForm(event,[W_LEK],'Badania lekarskie',[16711680])">
+<label>Imię i nazwisko pacjenta</label><input required>
+<label>Data urodzenia</label><input type="date" required>
+<label>Pesel / ID Roblox</label><input required>
+<label>Data badania</label><input type="date" required>
+<label>Miejsce badania</label><input required>
+<label>Osoba wykonująca</label><input required>
+<label>Stan zdrowia</label><textarea></textarea>
+<label>Wynik badania</label><select required><option>Pozytywny</option><option>Negatywny</option></select>
+<button class="send">WYŚLIJ RAPORT</button>
+<div class="success"></div>
+</form>
+</div>
+</div>
+
+<div id="mp" class="tab">
+<div class="card">
+<h2>Medycyna pracy</h2>
+<form onsubmit="sendForm(event,[W_MP],'Medycyna pracy',[65280])">
+<label>Imię i nazwisko pacjenta</label><input required>
+<label>Data urodzenia</label><input type="date" required>
+<label>Pesel / ID Roblox</label><input required>
+<label>Data badania</label><input type="date" required>
+<label>Miejsce badania</label><input required>
+<label>Osoba wykonująca</label><input required>
+<label>Stan zdrowia</label><textarea></textarea>
+<label>Wynik badania</label><select required><option>Pozytywny</option><option>Negatywny</option></select>
+<button class="send">WYŚLIJ RAPORT</button>
+<div class="success"></div>
+</form>
+</div>
+</div>
+
+<div id="potw" class="tab">
+<div class="card">
+<h2>Potwierdzenie badań</h2>
+<form onsubmit="sendForm(event,[W_POTW],'Potwierdzenie badań',[16711935])">
+<label>Rodzaj badania</label><select required><option>Lekarskie</option><option>Medycyna pracy</option><option>Psychologiczne</option></select>
+<label>Pacjent</label><input required>
+<label>Wystawiający</label><input required>
+<button class="send">WYŚLIJ POTWIERDZENIE</button>
+<div class="success"></div>
+</form>
+</div>
+</div>
+
+<div id="kmcr" class="tab">
+<div class="card">
+<h2>KMCR</h2>
+<form onsubmit="sendForm(event,[W_KMCR],'KMCR',[16744448])">
+<label>Pacjent</label><input>
+<label>Data urodzenia</label><input type="date">
+<label>Rozpoznanie na miejscu</label><textarea></textarea>
+<label>Podane leki</label><textarea></textarea>
+<label>Decyzja zespołu</label><select><option>Przyjazd do szpitala</option><option>Pozostawienie na miejscu</option></select>
+<label>Dowódca zespołu</label><input>
+<button class="send">WYŚLIJ KMCR</button>
+<div class="success"></div>
+</form>
+</div>
+</div>
+
+<div id="dyzur" class="tab">
+<div class="card">
+<h2>Dyżury</h2>
+<form onsubmit="sendForm(event,[W_DYZUR],'Dyżury',[16711680])">
+<label>Imię i nazwisko</label><input>
+<label>Nick Discord</label><input>
+<label>Od której do której</label><input>
+<label>Podpis</label><input>
+<button class="send">ROZPOCZNIJ DYŻUR</button>
+<div class="success"></div>
+</form>
+</div>
+</div>
+
+<div id="kontrola" class="tab">
+<div class="card">
+<h2>Kontrola pacjenta</h2>
+<form onsubmit="sendForm(event,[W_KONTROLA],'Kontrola pacjenta',[65280])">
+<label>Pacjent</label><input>
+<label>Data kontroli</label><input type="date">
+<label>Wynik kontroli</label><textarea></textarea>
+<label>Lekarz kontrolujący</label><input>
+<button class="send">WYŚLIJ KONTROLĘ</button>
+<div class="success"></div>
+</form>
+</div>
+</div>
+
+<div id="akta" class="tab">
+<div class="card">
+<h2>Akta zgonów</h2>
+<form onsubmit="sendForm(event,[W_AKTA],'Akt zgonu',[16711935])">
+<label>Imię i nazwisko</label><input>
+<label>Data zgonu</label><input type="date">
+<label>Miejsce zgonu</label><input>
+<label>Wymagane zawiadomienie prokuratury</label><select><option>Nie</option><option>Tak</option></select>
+<button class="send">WYSTAW AKT ZGONU</button>
+<div class="success"></div>
+</form>
+</div>
+</div>
+
+<div id="sekcja" class="tab">
+<div class="card">
+<h2>Sekcja zwłok</h2>
+<form onsubmit="sendForm(event,[W_SEKCJE1,W_SEKCJE2],'Sekcja zwłok',[16711680,65280])">
+<label>Zmarły</label><input>
+<label>Typ sekcji</label><select><option>Lekarsko sądowa</option><option>Patomorfologiczna</option></select>
+<label>Wnioski końcowe</label><textarea></textarea>
+<button class="send">WYŚLIJ WYNIK SEKCJI</button>
+<div class="success"></div>
+</form>
+</div>
+</div>
+
+<div id="operacja" class="tab">
+<div class="card">
+<h2>Operacja</h2>
+<form onsubmit="sendForm(event,[W_OPERACJA],'Operacja',[16711680])">
+<label>Imię i Nazwisko Pacjenta</label><input>
+<label>Jaka operacja</label><input>
+<label>Przebieg operacji</label><textarea></textarea>
+<label>Wynik operacji</label><select><option>Pozytywny</option><option>Negatywny</option></select>
+<button class="send">ZAKOŃCZ OPERACJĘ</button>
+<div class="success"></div>
+</form>
+</div>
+</div>
+
+<div id="skierowania" class="tab">
+<div class="card">
+<h2>Skierowania</h2>
+<form onsubmit="sendForm(event,[W_SKIER],'Skierowanie',[3447003])">
+<label>Imię i Nazwisko pacjenta</label><input>
+<label>Do</label><input>
+<label>Treść skierowania</label><textarea></textarea>
+<button class="send">WYSTAW SKIEROWANIE</button>
+<div class="success"></div>
+</form>
+</div>
+</div>
+
+<div id="zalecenia" class="tab">
+<div class="card">
+<h2>Zalecenia</h2>
+<form onsubmit="sendForm(event,[W_ZALEC],'Zalecenia',[5763719])">
+<label>Imię i Nazwisko pacjenta</label><input>
+<label>Zalecam</label><textarea></textarea>
+<button class="send">WYŚLIJ ZALECENIA</button>
+<div class="success"></div>
+</form>
+</div>
+</div>
+
+</body>
+</html>
