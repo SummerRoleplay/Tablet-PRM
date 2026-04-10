@@ -173,11 +173,10 @@ button.send:hover {
 <body>
 
 <header>Państwowe Ratownictwo Medyczne</header>
-
 <nav>
 <button onclick="openTab('lek')">Badania lekarskie</button>
 <button onclick="openTab('mp')">Medycyna pracy</button>
-<button onclick="openTab('potw')">Potwierdzenie badań</button>
+<button onclick="openTab('psych')">Badania psychologiczne</button>
 <button onclick="openTab('kmcr')">KMCR</button>
 <button onclick="openTab('dyzur')">Dyżury</button>
 <button onclick="openTab('kontrola')">Kontrola pacjenta</button>
@@ -191,10 +190,10 @@ button.send:hover {
 <audio id="sendSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
 
 <script>
-/* WEBHOOKS */
 const W_LEK="https://discord.com/api/webhooks/1480275580279722125/6rnHYb77BAgd8UEmOBkF1xKZooS25RNVkwVb55WRtmeG-jSgkGHBWNQdROhbx2VnkDnZ";
 const W_MP="https://discord.com/api/webhooks/1480275725964541983/J03cqAUnqGZhhsXNP71I9CtiRlknwoFYTa2oCo_3hXOMZPbJE06L6dBlPqWLxAVXiCNf";
-const W_POTW="https://discord.com/api/webhooks/1436092452867149956/NChLgqn7b379Hf7WBDd0mJX_-WtpsnouApwDdSeGB39PfEjbZ109UQ0QGiExbg3pnoHd";
+const W_PSYCH1="https://discord.com/api/webhooks/1480275894789472256/Dya-OtNlKCjmF7_yr49xfi4f4wKMgTURNzYJb7zDHJfmDsQeCTrVaRPzpZ27ZXez8JL6";
+const W_PSYCH2="https://discord.com/api/webhooks/1472329899741020341/JipZ8gAntYs9ND3nG_Y6THEx45KCZFBzJOFkEVjlb0O-JX8Gz3QrXkqCNEDI-aQYrbul";
 const W_KMCR="https://discord.com/api/webhooks/1480276027308511367/x5e3jOG-Ac3OZavU9nexNPWcCb36rP8M6Fdu45Bd4M9ImL_-TwGZvrnH817QdNVwx5z0";
 const W_DYZUR="https://discord.com/api/webhooks/1480276290102759579/hBoSemWXnzohj_H1xAhpjJPJ5tx7WM10gGiK67xdvKLOrKIaavkjBXt4bVJVy7S3CmJi";
 const W_KONTROLA="https://discord.com/api/webhooks/1480276422613270741/vfA9Py1SlmRyTdcMjv6S4fV0ACMowXeCjNbjxdBlYkH8W1cExCCUwrg6Kl4gMkvXLD7E";
@@ -227,7 +226,7 @@ function sendForm(e,webhooks,title,colors){
       body:JSON.stringify({embeds:[{title:title,description:values,color:colors[i]||16711680}]})
     });
   });
-  form.querySelector(".success").innerText="Wysłane pomyślnie!";
+  form.querySelector(".success").innerText="Wysłano!";
   document.getElementById("sendSound").play();
   form.reset();
 }
@@ -245,7 +244,7 @@ function sendForm(e,webhooks,title,colors){
 <label>Osoba wykonująca</label><input required>
 <label>Stan zdrowia</label><textarea></textarea>
 <label>Wynik badania</label><select required><option>Pozytywny</option><option>Negatywny</option></select>
-<button class="send">WYŚLIJ RAPORT</button>
+<button class="send">WYŚLIJ</button>
 <div class="success"></div>
 </form>
 </div>
@@ -263,20 +262,28 @@ function sendForm(e,webhooks,title,colors){
 <label>Osoba wykonująca</label><input required>
 <label>Stan zdrowia</label><textarea></textarea>
 <label>Wynik badania</label><select required><option>Pozytywny</option><option>Negatywny</option></select>
-<button class="send">WYŚLIJ RAPORT</button>
+<button class="send">WYŚLIJ</button>
 <div class="success"></div>
 </form>
 </div>
 </div>
 
-<div id="potw" class="tab">
+<div id="psych" class="tab">
 <div class="card">
-<h2>Potwierdzenie badań</h2>
-<form onsubmit="sendForm(event,[W_POTW],'Potwierdzenie badań',[16711935])">
-<label>Rodzaj badania</label><select required><option>Lekarskie</option><option>Medycyna pracy</option><option>Psychologiczne</option></select>
-<label>Pacjent</label><input required>
-<label>Wystawiający</label><input required>
-<button class="send">WYŚLIJ POTWIERDZENIE</button>
+<h2>Badania psychologiczne</h2>
+<form onsubmit="sendForm(event,[W_PSYCH1,W_PSYCH2],'Badania psychologiczne',[16776960,255])">
+<label>Imię i nazwisko pacjenta</label><input required>
+<label>Data urodzenia</label><input type="date" required>
+<label>Pesel / ID Roblox</label><input required>
+<label>Data badania</label><input type="date" required>
+<label>Miejsce badania</label><input required>
+<label>Osoba wykonująca</label><input required>
+<label>Odporność na stres</label><select><option>Niska</option><option>Średnia</option><option>Wysoka</option></select>
+<label>Stabilność emocjonalna</label><select><option>Niska</option><option>Średnia</option><option>Wysoka</option></select>
+<label>Impulsywność</label><select><option>Tak</option><option>Nie</option></select>
+<label>Empatia</label><select><option>Niska</option><option>Średnia</option><option>Wysoka</option></select>
+<label>Wynik</label><select required><option>Brak przeciwwskazań</option><option>Istnieją przeciwwskazania</option></select>
+<button class="send">WYŚLIJ</button>
 <div class="success"></div>
 </form>
 </div>
@@ -287,12 +294,11 @@ function sendForm(e,webhooks,title,colors){
 <h2>KMCR</h2>
 <form onsubmit="sendForm(event,[W_KMCR],'KMCR',[16744448])">
 <label>Pacjent</label><input>
-<label>Data urodzenia</label><input type="date">
 <label>Rozpoznanie na miejscu</label><textarea></textarea>
 <label>Podane leki</label><textarea></textarea>
 <label>Decyzja zespołu</label><select><option>Przyjazd do szpitala</option><option>Pozostawienie na miejscu</option></select>
 <label>Dowódca zespołu</label><input>
-<button class="send">WYŚLIJ KMCR</button>
+<button class="send">WYŚLIJ</button>
 <div class="success"></div>
 </form>
 </div>
@@ -303,10 +309,9 @@ function sendForm(e,webhooks,title,colors){
 <h2>Dyżury</h2>
 <form onsubmit="sendForm(event,[W_DYZUR],'Dyżury',[16711680])">
 <label>Imię i nazwisko</label><input>
-<label>Nick Discord</label><input>
 <label>Od której do której</label><input>
 <label>Podpis</label><input>
-<button class="send">ROZPOCZNIJ DYŻUR</button>
+<button class="send">WYŚLIJ</button>
 <div class="success"></div>
 </form>
 </div>
@@ -317,10 +322,9 @@ function sendForm(e,webhooks,title,colors){
 <h2>Kontrola pacjenta</h2>
 <form onsubmit="sendForm(event,[W_KONTROLA],'Kontrola pacjenta',[65280])">
 <label>Pacjent</label><input>
-<label>Data kontroli</label><input type="date">
 <label>Wynik kontroli</label><textarea></textarea>
 <label>Lekarz kontrolujący</label><input>
-<button class="send">WYŚLIJ KONTROLĘ</button>
+<button class="send">WYŚLIJ</button>
 <div class="success"></div>
 </form>
 </div>
@@ -333,8 +337,7 @@ function sendForm(e,webhooks,title,colors){
 <label>Imię i nazwisko</label><input>
 <label>Data zgonu</label><input type="date">
 <label>Miejsce zgonu</label><input>
-<label>Wymagane zawiadomienie prokuratury</label><select><option>Nie</option><option>Tak</option></select>
-<button class="send">WYSTAW AKT ZGONU</button>
+<button class="send">WYŚLIJ</button>
 <div class="success"></div>
 </form>
 </div>
@@ -345,9 +348,8 @@ function sendForm(e,webhooks,title,colors){
 <h2>Sekcja zwłok</h2>
 <form onsubmit="sendForm(event,[W_SEKCJE1,W_SEKCJE2],'Sekcja zwłok',[16711680,65280])">
 <label>Zmarły</label><input>
-<label>Typ sekcji</label><select><option>Lekarsko sądowa</option><option>Patomorfologiczna</option></select>
 <label>Wnioski końcowe</label><textarea></textarea>
-<button class="send">WYŚLIJ WYNIK SEKCJI</button>
+<button class="send">WYŚLIJ</button>
 <div class="success"></div>
 </form>
 </div>
@@ -360,8 +362,7 @@ function sendForm(e,webhooks,title,colors){
 <label>Imię i Nazwisko Pacjenta</label><input>
 <label>Jaka operacja</label><input>
 <label>Przebieg operacji</label><textarea></textarea>
-<label>Wynik operacji</label><select><option>Pozytywny</option><option>Negatywny</option></select>
-<button class="send">ZAKOŃCZ OPERACJĘ</button>
+<button class="send">WYŚLIJ</button>
 <div class="success"></div>
 </form>
 </div>
@@ -374,7 +375,7 @@ function sendForm(e,webhooks,title,colors){
 <label>Imię i Nazwisko pacjenta</label><input>
 <label>Do</label><input>
 <label>Treść skierowania</label><textarea></textarea>
-<button class="send">WYSTAW SKIEROWANIE</button>
+<button class="send">WYŚLIJ</button>
 <div class="success"></div>
 </form>
 </div>
@@ -386,7 +387,7 @@ function sendForm(e,webhooks,title,colors){
 <form onsubmit="sendForm(event,[W_ZALEC],'Zalecenia',[5763719])">
 <label>Imię i Nazwisko pacjenta</label><input>
 <label>Zalecam</label><textarea></textarea>
-<button class="send">WYŚLIJ ZALECENIA</button>
+<button class="send">WYŚLIJ</button>
 <div class="success"></div>
 </form>
 </div>
