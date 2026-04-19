@@ -1,420 +1,508 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tablet | PRM — Summer RP</title>
-<link rel="icon" href="./PRM.png">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Medyczny | Szpital Wojewódzki w Gdańsku</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-input: #0f172a;
+            --primary: #e11d48;
+            --primary-hover: #be123c;
+            --accent-blue: #3b82f6;
+            --border-color: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --radius: 6px;
+        }
 
-<style>
-:root {
-  --primary: #ff3b3b;
-  --primary-hover: #ff5c5c;
-  --bg-dark: #0f0f12;
-  --card-bg: #1a1a1e;
-  --input-bg: #252529;
-  --text-main: #e0e0e0;
-  --text-dim: #a0a0a5;
-  --radius: 12px;
-  --shadow: 0 8px 32px rgba(0,0,0,0.5);
-}
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        body {
+            margin: 0;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
 
-/* ===== GLOBAL ===== */
-* { box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        header {
+            background-color: #0b1120;
+            padding: 20px 30px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
 
-body {
-  margin: 0;
-  background-color: var(--bg-dark);
-  color: var(--text-main);
-  line-height: 1.6;
-  background-image: 
-    radial-gradient(circle at 0% 0%, rgba(255, 59, 59, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 100% 100%, rgba(255, 59, 59, 0.05) 0%, transparent 40%);
-  background-attachment: fixed;
-}
+        .logo-container h1 { margin: 0; font-size: 20px; font-weight: 700; color: #ffffff; letter-spacing: 0.5px; }
+        .logo-container p { margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 500; }
 
-/* ===== HEADER ===== */
-header {
-  background: rgba(26, 26, 30, 0.8);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 20px;
-  text-align: center;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: var(--primary);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
+        .clock { font-variant-numeric: tabular-nums; font-size: 16px; font-weight: 600; color: var(--accent-blue); }
 
-/* ===== NAV ===== */
-nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
+        nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            padding: 20px 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
-nav button {
-  background: var(--card-bg);
-  color: var(--text-dim);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 10px 18px;
-  border-radius: var(--radius);
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
+        nav button {
+            background-color: var(--bg-card);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: var(--radius);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
 
-nav button:hover {
-  background: rgba(255, 59, 59, 0.1);
-  color: var(--primary);
-  border-color: var(--primary);
-  transform: translateY(-2px);
-}
+        nav button:hover { border-color: var(--text-muted); color: var(--text-main); }
 
-/* ===== TABS & CARDS ===== */
-.tab {
-  display: none;
-  padding: 20px;
-  animation: fadeIn 0.4s ease-out;
-}
+        nav button.active {
+            background-color: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
 
-.active { display: block; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-out; }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-.card {
-  max-width: 750px;
-  margin: 0 auto 50px;
-  background: var(--card-bg);
-  border-radius: 20px;
-  padding: 40px;
-  box-shadow: var(--shadow);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
 
-.card h2 {
-  margin-top: 0;
-  font-size: 24px;
-  color: #fff;
-  border-left: 4px solid var(--primary);
-  padding-left: 15px;
-  margin-bottom: 30px;
-}
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
 
-/* ===== FORM ELEMENTS ===== */
-label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-dim);
-  text-transform: uppercase;
-}
+        .card h2::before { content: ''; display: block; width: 4px; height: 18px; background-color: var(--primary); border-radius: 2px; }
 
-input, select, textarea {
-  width: 100%;
-  padding: 14px;
-  background: var(--input-bg);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius);
-  color: #fff;
-  font-size: 15px;
-  margin-bottom: 25px;
-  transition: all 0.2s;
-}
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px; }
+        .form-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px; }
+        .full-width { grid-column: 1 / -1; }
 
-input:focus, textarea:focus, select:focus {
-  outline: none;
-  border-color: var(--primary);
-  background: #2d2d33;
-  box-shadow: 0 0 0 4px rgba(255, 59, 59, 0.1);
-}
+        .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
 
-button.send {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 16px;
-  width: 100%;
-  border-radius: var(--radius);
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 4px 15px rgba(255, 59, 59, 0.3);
-}
+        input, select, textarea {
+            width: 100%;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px;
+            border-radius: var(--radius);
+            font-size: 14px;
+            transition: border-color 0.2s;
+            outline: none;
+        }
 
-button.send:hover {
-  background: var(--primary-hover);
-  transform: translateY(-2px);
-}
+        input:focus, select:focus, textarea:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 1px var(--accent-blue); }
 
-.success {
-  margin-top: 20px;
-  color: #00ff88;
-  text-align: center;
-  font-weight: 600;
-}
-</style>
+        .section-divider {
+            grid-column: 1 / -1;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin: 15px 0 5px 0;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .btn-submit {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-submit:hover { background-color: var(--primary-hover); }
+
+        /* Styl dla przycisku losowania w labie */
+        .btn-random {
+            background-color: #475569;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: var(--radius);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+        }
+
+        .btn-random:hover { background-color: #64748b; }
+    </style>
 </head>
-
 <body>
 
-<header>Państwowe Ratownictwo Medyczne</header>
+<header>
+    <div class="logo-container">
+        <h1>SZPITAL WOJEWÓDZKI W GDAŃSKU</h1>
+        <p>System Zarządzania Dokumentacją Medyczną (HIS)</p>
+    </div>
+    <div class="clock" id="clock">00:00:00</div>
+</header>
 
 <nav>
-<button onclick="openTab('lek')">Badania lekarskie</button>
-<button onclick="openTab('mp')">Medycyna pracy</button>
-<button onclick="openTab('psych')">Badania psychologiczne</button>
-<button onclick="openTab('kmcr')">KMCR</button>
-<button onclick="openTab('dyzur')">Dyżury</button>
-<button onclick="openTab('kontrola')">Kontrola pacjenta</button>
-<button onclick="openTab('akta')">Akta zgonów</button>
-<button onclick="openTab('sekcja')">Sekcja zwłok</button>
-<button onclick="openTab('operacja')">Operacja</button>
-<button onclick="openTab('skierowania')">Skierowania</button>
-<button onclick="openTab('zalecenia')">Zalecenia</button>
+    <button onclick="switchTab('kmcr', this)" class="active">Karta KMCR</button>
+    <button onclick="switchTab('sor', this)">Izba Przyjęć (SOR)</button>
+    <button onclick="switchTab('kardio', this)">Kardiologia i RKO</button>
+    <button onclick="switchTab('operacyjny', this)">Blok Operacyjny</button>
+    <button onclick="switchTab('lab', this)">Laboratorium</button>
+    <button onclick="switchTab('diag', this)">Radiologia (RTG/TK)</button>
+    <button onclick="switchTab('psych', this)">Psychiatria</button>
+    <button onclick="switchTab('biuro', this)">Dokumentacja / Recepty</button>
+    <button onclick="switchTab('zgony', this)">Akta Zgonu i Sekcje</button>
 </nav>
 
-<audio id="sendSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+<div class="container">
+
+    <div id="kmcr" class="tab-content active">
+        <div class="card">
+            <h2>Karta Medycznych Czynności Ratunkowych</h2>
+            <form onsubmit="handleForm(event, [W_KMCR], 'Karta KMCR', 16711680)">
+                <div class="form-grid">
+                    <div class="input-group"><label>Imię i nazwisko pacjenta (lub ID)</label><input required></div>
+                    <div class="input-group"><label>Wiek pacjenta</label><input type="number" placeholder="Lata" min="0"></div>
+                    <div class="input-group full-width"><label>Miejsce zdarzenia</label><input required></div>
+                </div>
+                <div class="form-grid-3">
+                    <div class="input-group"><label>Tętno (HR)</label><input placeholder="bpm"></div>
+                    <div class="input-group"><label>Ciśnienie (RR)</label><input placeholder="np. 120/80 mmHg"></div>
+                    <div class="input-group"><label>Saturacja (SpO2)</label><input placeholder="%"></div>
+                    <div class="input-group"><label>Skala Glasgow (GCS)</label><input type="number" value="15" min="3" max="15"></div>
+                    <div class="input-group"><label>Reakcja źrenic</label><select><option>Prawidłowa</option><option>Brak reakcji</option><option>Nierówne (Anizokoria)</option><option>Szpilkowate</option></select></div>
+                    <div class="input-group"><label>Poziom glukozy</label><input placeholder="mg/dL"></div>
+                </div>
+                <div class="form-grid">
+                    <div class="input-group full-width"><label>Opis obrażeń / Wywiad SAMPLE</label><textarea rows="3" placeholder="Co się stało? Jakie rany?"></textarea></div>
+                    <div class="input-group full-width"><label>Podjęte czynności ratunkowe i podane leki</label><textarea rows="3" placeholder="np. Założenie wkłucia, podanie morfiny 5mg..."></textarea></div>
+                </div>
+                <button class="btn-submit">Zatwierdź Kartę KMCR</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="sor" class="tab-content">
+        <div class="card">
+            <h2>Przyjęcie na Szpitalny Oddział Ratunkowy</h2>
+            <form onsubmit="handleForm(event, [W_KONTROLA], 'Karta SOR', 3447003)">
+                <div class="form-grid">
+                    <div class="input-group"><label>Pacjent</label><input required></div>
+                    <div class="input-group"><label>Triage (Skala Manchester)</label>
+                        <select>
+                            <option>Czerwony (Natychmiastowa pomoc)</option>
+                            <option>Pomarańczowy (Bardzo pilny - do 10 min)</option>
+                            <option>Żółty (Pilny - do 60 min)</option>
+                            <option>Zielony (Standardowy - do 120 min)</option>
+                        </select>
+                    </div>
+                    <div class="input-group"><label>Alergie</label><input placeholder="Brak / Opisz"></div>
+                    <div class="input-group"><label>Choroby przewlekłe</label><input placeholder="Brak / Opisz"></div>
+                    <div class="input-group full-width"><label>Wstępna diagnoza i opis lekarski</label><textarea rows="4"></textarea></div>
+                </div>
+                <button class="btn-submit">Zarejestruj Pacjenta</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="kardio" class="tab-content">
+        <div class="card">
+            <h2>Protokół Kardiologiczny i RKO</h2>
+            <form onsubmit="handleForm(event, [W_LEK], 'Protokół RKO', 16711680)">
+                <div class="form-grid">
+                    <div class="input-group"><label>Rytm serca pacjenta</label><select><option>Rytm Zatokowy (Norma)</option><option>Migotanie Komór (VF)</option><option>Asystolia</option><option>Częstoskurcz (VT)</option></select></div>
+                    <div class="input-group"><label>Czas trwania RKO (minuty)</label><input type="number"></div>
+                    <div class="input-group"><label>Liczba wyładowań (Defibrylacja)</label><input type="number" value="0"></div>
+                    <div class="input-group"><label>Sumaryczna dawka Adrenaliny (mg)</label><input type="number" placeholder="np. 3"></div>
+                    <div class="input-group full-width"><label>Efekt końcowy</label><select><option>ROSC (Powrót krążenia - pacjent żyje)</option><option>Zgon pacjenta</option></select></div>
+                </div>
+                <button class="btn-submit">Zapisz Protokół</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="operacyjny" class="tab-content">
+        <div class="card">
+            <h2>Protokół Operacyjny</h2>
+            <form onsubmit="handleForm(event, [W_OPERACJA], 'Protokół Operacji', 16711680)">
+                <div class="form-grid">
+                    <div class="input-group full-width"><label>Nazwa procedury / Zabiegu</label><input required placeholder="np. Usunięcie pocisków z klatki piersiowej"></div>
+                    <div class="input-group"><label>Główny Chirurg (Operator)</label><input required></div>
+                    <div class="input-group"><label>Anestezjolog</label><input></div>
+                    <div class="input-group"><label>Rodzaj znieczulenia</label><select><option>Ogólne (Narkoza)</option><option>Miejscowe</option><option>Podpajęczynówkowe</option></select></div>
+                    <div class="input-group"><label>Czas operacji (minuty)</label><input type="number"></div>
+                    <div class="input-group full-width"><label>Opis przebiegu operacji</label><textarea rows="5" placeholder="Opisz kroki chirurgiczne, komplikacje itp."></textarea></div>
+                </div>
+                <button class="btn-submit">Archiwizuj Operację</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="lab" class="tab-content">
+        <div class="card">
+            <h2>Badania Laboratoryjne i Toksykologia</h2>
+            <form onsubmit="handleForm(event, [W_LEK], 'Wyniki Lab', 65280)">
+                <div class="form-grid">
+                    <div class="input-group"><label>Pacjent</label><input required id="lab_pacjent"></div>
+                    <div class="input-group"><label>Grupa Krwi</label><select><option>Nieznana</option><option>0 Rh-</option><option>0 Rh+</option><option>A Rh+</option><option>B Rh+</option><option>AB Rh+</option></select></div>
+                    
+                    <div class="section-divider">Toksykologia <button type="button" class="btn-random" onclick="randomizeToxicology()">🎲 Losuj wyniki</button></div>
+                    
+                    <div class="input-group">
+                        <label>Poziom alkoholu we krwi (Promile)</label>
+                        <input id="lab_alkohol" placeholder="0.00 ‰">
+                    </div>
+                    <div class="input-group">
+                        <label>Panel Narkotykowy</label>
+                        <select id="lab_narkotyki">
+                            <option value="Wszystkie negatywne">Wszystkie negatywne</option>
+                            <option value="Pozytywny - Marihuana (THC)">Pozytywny - Marihuana (THC)</option>
+                            <option value="Pozytywny - Opiaty (Heroina, Morfina)">Pozytywny - Opiaty (Heroina, Morfina)</option>
+                            <option value="Pozytywny - Amfetamina/Metamfetamina">Pozytywny - Amfetamina/Metamfetamina</option>
+                            <option value="Pozytywny - Kokaina">Pozytywny - Kokaina</option>
+                            <option value="Mieszany (Wiele substancji)">Mieszany (Wiele substancji)</option>
+                        </select>
+                    </div>
+
+                    <div class="section-divider">Wyniki Ogólne</div>
+                    <div class="input-group full-width"><label>Morfologia / Inne parametry (Opis)</label><textarea rows="3" placeholder="np. Podwyższone leukocyty, wskaźniki zapalne w normie..."></textarea></div>
+                </div>
+                <button class="btn-submit">Zatwierdź Wyniki</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="diag" class="tab-content">
+        <div class="card">
+            <h2>Pracownia Diagnostyki Obrazowej</h2>
+            <form onsubmit="handleForm(event, [W_LEK], 'Wynik Radiologii', 10181046)">
+                <div class="form-grid">
+                    <div class="input-group"><label>Rodzaj badania</label><select><option>Zdjęcie RTG</option><option>Tomografia Komputerowa (TK)</option><option>Rezonans Magnetyczny (MRI)</option><option>USG</option></select></div>
+                    <div class="input-group"><label>Badany obszar ciała</label><input placeholder="np. Klatka piersiowa, Czaszka, Jama brzuszna" required></div>
+                    <div class="input-group full-width"><label>Opis i wnioski radiologa</label><textarea rows="5" placeholder="Opisz co widać na obrazie (np. widoczne złamanie żeber, brak ciał obcych)..."></textarea></div>
+                </div>
+                <button class="btn-submit">Wyślij Opis Badania</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="psych" class="tab-content">
+        <div class="card">
+            <h2>Kompleksowe Badanie Psychiatryczne / Psychologiczne</h2>
+            <form onsubmit="handleForm(event, [W_PSYCH1], 'Ocena Psychiatryczna', 10181046)">
+                <div class="form-grid">
+                    <div class="input-group"><label>Imię i nazwisko pacjenta</label><input required></div>
+                    <div class="input-group"><label>Skierowanie wystawił (Opcjonalnie)</label><input placeholder="Lekarz / LSPD"></div>
+                    
+                    <div class="section-divider">Ocena Stanu Psychicznego</div>
+                    <div class="input-group"><label>Kontakt z pacjentem</label><select><option>Prawidłowy</option><option>Utrudniony</option><option>Brak kontaktu</option></select></div>
+                    <div class="input-group"><label>Świadomość i orientacja</label><select><option>W pełni zorientowany</option><option>Przymglona</option><option>Zdezorientowany (Czas/Miejsce)</option></select></div>
+                    <div class="input-group"><label>Nastrój i Afekt</label><select><option>Wyrównany</option><option>Obniżony (Depresyjny)</option><option>Podwyższony (Mania)</option><option>Drażliwy</option></select></div>
+                    <div class="input-group"><label>Ocena ryzyka zagrożenia</label><select><option>Brak zagrożenia</option><option>Zagrożenie dla siebie (Autoagresja)</option><option>Zagrożenie dla otoczenia (Agresja)</option></select></div>
+
+                    <div class="section-divider">Szczegółowy Wywiad i Obserwacje</div>
+                    <div class="input-group full-width"><label>Zaburzenia postrzegania (Omamy, halucynacje, urojenia)</label><textarea rows="2" placeholder="Czy pacjent widzi/słyszy rzeczy, których nie ma?"></textarea></div>
+                    <div class="input-group full-width"><label>Notatki z wywiadu psychologicznego</label><textarea rows="4" placeholder="Podsumowanie rozmowy z pacjentem..."></textarea></div>
+                    <div class="input-group full-width"><label>Decyzja końcowa / Zalecenia</label><select><option>Brak przeciwwskazań psychiatrycznych (Zwolnienie do domu)</option><option>Zalecono terapię ambulatoryjną (Leki + Konsultacje)</option><option>Przymusowa hospitalizacja psychiatryczna (Zamknięcie)</option></select></div>
+                </div>
+                <button class="btn-submit">Zatwierdź Opinie Psychiatryczną</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="biuro" class="tab-content">
+        <div class="card">
+            <h2>Dokumentacja Medyczna / Administracja</h2>
+            <form onsubmit="handleForm(event, [W_AKTA], 'Dokument Administracyjny', 3447003)">
+                <div class="form-grid">
+                    <div class="input-group"><label>Rodzaj dokumentu</label>
+                        <select>
+                            <option>E-Recepta na leki</option>
+                            <option>Skierowanie do specjalisty</option>
+                            <option>Zwolnienie lekarskie (L4)</option>
+                            <option>Zalecenia poekspozycyjne / wypisowe</option>
+                        </select>
+                    </div>
+                    <div class="input-group"><label>Pacjent</label><input required></div>
+                    <div class="input-group full-width"><label>Treść dokumentu (np. Dawkowanie leków, okres zwolnienia)</label><textarea rows="5"></textarea></div>
+                </div>
+                <button class="btn-submit">Wystaw Dokument</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="zgony" class="tab-content">
+        <div class="card">
+            <h2>Akta Zgonu i Protokół Sekcji Zwłok</h2>
+            <form onsubmit="handleForm(event, [W_AKTA], 'Karta Zgonu / Sekcja', 0)">
+                <div class="form-grid">
+                    <div class="input-group"><label>Dane zmarłego (Denat)</label><input required></div>
+                    <div class="input-group"><label>Data i czas zgonu</label><input type="datetime-local"></div>
+                    <div class="input-group"><label>Miejsce stwierdzenia zgonu</label><input placeholder="np. Szpital, Ulica, Dom"></div>
+                    <div class="input-group"><label>Lekarz stwierdzający / Patolog</label><input required></div>
+
+                    <div class="section-divider">Przyczyny Zgonu (Medyczne)</div>
+                    <div class="input-group full-width"><label>Wyjściowa przyczyna zgonu (np. Rana postrzałowa głowy)</label><input></div>
+                    <div class="input-group full-width"><label>Bezpośrednia przyczyna zgonu (np. Rozległe uszkodzenie mózgu)</label><input></div>
+
+                    <div class="section-divider">Protokół Sekcji Zwłok (Opcjonalnie)</div>
+                    <div class="input-group full-width"><label>Opis obrażeń zewnętrznych i wewnętrznych</label><textarea rows="4" placeholder="Szczegółowy opis obrażeń, wlotów kul, złamań..."></textarea></div>
+                    <div class="input-group full-width"><label>Wyniki badań toksykologicznych (Pośmiertne)</label><input placeholder="Brak substancji / Wykryto..."></div>
+
+                    <div class="section-divider">Depozyt / Rzeczy Osobiste</div>
+                    <div class="input-group full-width"><label>Inwentarz przedmiotów przekazanych (np. LSPD)</label><textarea rows="2" placeholder="np. Dowód osobisty, Portfel, Gotówka, Przedmioty nielegalne..."></textarea></div>
+                </div>
+                <button class="btn-submit" style="background-color: #334155;">Zatwierdź Dokumentację Pośmiertną</button>
+            </form>
+        </div>
+    </div>
+
+</div>
 
 <script>
-/* WEBHOOKI */
-const W_LEK="https://discord.com/api/webhooks/1480275580279722125/6rnHYb77BAgd8UEmOBkF1xKZooS25RNVkwVb55WRtmeG-jSgkGHBWNQdROhbx2VnkDnZ";
-const W_MP="https://discord.com/api/webhooks/1480275725964541983/J03cqAUnqGZhhsXNP71I9CtiRlknwoFYTa2oCo_3hXOMZPbJE06L6dBlPqWLxAVXiCNf";
-const W_PSYCH1="https://discord.com/api/webhooks/1480275894789472256/Dya-OtNlKCjmF7_yr49xfi4f4wKMgTURNzYJb7zDHJfmDsQeCTrVaRPzpZ27ZXez8JL6";
-const W_PSYCH2="https://discord.com/api/webhooks/1472329899741020341/JipZ8gAntYs9ND3nG_Y6THEx45KCZFBzJOFkEVjlb0O-JX8Gz3QrXkqCNEDI-aQYrbul";
-const W_KMCR="https://discord.com/api/webhooks/1480276027308511367/x5e3jOG-Ac3OZavU9nexNPWcCb36rP8M6Fdu45Bd4M9ImL_-TwGZvrnH817QdNVwx5z0";
-const W_DYZUR="https://discord.com/api/webhooks/1480276290102759579/hBoSemWXnzohj_H1xAhpjJPJ5tx7WM10gGiK67xdvKLOrKIaavkjBXt4bVJVy7S3CmJi";
-const W_KONTROLA="https://discord.com/api/webhooks/1480276422613270741/vfA9Py1SlmRyTdcMjv6S4fV0ACMowXeCjNbjxdBlYkH8W1cExCCUwrg6Kl4gMkvXLD7E";
-const W_SEKCJE1="https://discord.com/api/webhooks/1480276136364871782/JzvVcwrrr4fI4LEaEBEbXWd5nwdL7qB9Jx3MrVPWSqzdEFZ0bjt8UX4Ry_L1BI28U1C0";
-const W_SEKCJE2="https://discord.com/api/webhooks/1475603174827098387/IbDxNTi8JoPsENmofqueU1uVPtIibIinUA0-hyfO-3mwoxyEKb2zgIWJ4nY7GaMAdoUS";
-const W_AKTA="https://discord.com/api/webhooks/1475607510047002687/4C-QvJyqlHUemto-7hutH66FNicOsxg4ZQ4gQsffoqoWxQG0F1pAAdrPKEVfEcg66qKS";
-const W_OPERACJA="https://discord.com/api/webhooks/1491173121506677008/ce-8YWT5TU-kzNLApfT1m31Eb-lqycbOxh9yyLbS7IoiV7PFZ1umeh6qMvCfocclaI3P";
-const W_SKIER="https://discord.com/api/webhooks/1491173120760090734/MgNSe74l8lPUdVjAumXuOsXVZcopdMj0f8c5dXxDkUoBIJMmXiboKT62Ofoclyjqt0Nn";
-const W_ZALEC="https://discord.com/api/webhooks/1491173104792109258/imLQQbCxG1c2ra50QUdqVfvpJHL3CQ1GEXS80NSwgT1jNi1skW7GJMeI8gekbMalw6CC";
+    // Twoje Webhooki
+    const W_LEK = "https://discord.com/api/webhooks/1480275580279722125/6rnHYb77BAgd8UEmOBkF1xKZooS25RNVkwVb55WRtmeG-jSgkGHBWNQdROhbx2VnkDnZ";
+    const W_KMCR = "https://discord.com/api/webhooks/1480276027308511367/x5e3jOG-Ac3OZavU9nexNPWcCb36rP8M6Fdu45Bd4M9ImL_-TwGZvrnH817QdNVwx5z0";
+    const W_PSYCH1 = "https://discord.com/api/webhooks/1480275894789472256/Dya-OtNlKCjmF7_yr49xfi4f4wKMgTURNzYJb7zDHJfmDsQeCTrVaRPzpZ27ZXez8JL6";
+    const W_KONTROLA = "https://discord.com/api/webhooks/1480276422613270741/vfA9Py1SlmRyTdcMjv6S4fV0ACMowXeCjNbjxdBlYkH8W1cExCCUwrg6Kl4gMkvXLD7E";
+    const W_OPERACJA = "https://discord.com/api/webhooks/1491173121506677008/ce-8YWT5TU-kzNLApfT1m31Eb-lqycbOxh9yyLbS7IoiV7PFZ1umeh6qMvCfocclaI3P";
+    const W_AKTA = "https://discord.com/api/webhooks/1475607510047002687/4C-QvJyqlHUemto-7hutH66FNicOsxg4ZQ4gQsffoqoWxQG0F1pAAdrPKEVfEcg66qKS";
 
-function openTab(id){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-/* ZAAWANSOWANA FUNKCJA WYSYŁANIA EMBEDÓW */
-function sendForm(e, webhooks, title, colors) {
-  e.preventDefault();
-  const form = e.target;
-  let fields = [];
-
-  form.querySelectorAll("label").forEach(label => {
-    let input = label.nextElementSibling;
-    if (input && input.value) {
-      // Jeśli pole jest długie (np. textarea), ustawiamy inline na false
-      const isLong = input.tagName === "TEXTAREA" || input.value.length > 35;
-      
-      fields.push({
-        name: `🔹 ${label.innerText}`,
-        value: `\`\`\`${input.value}\`\`\``, // Wartość w bloku kodu dla czytelności
-        inline: !isLong
-      });
+    function switchTab(id, btn) {
+        // Ukryj wszystkie taby
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        // Zresetuj wszystkie przyciski
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        
+        // Pokaż wybrany
+        document.getElementById(id).classList.add('active');
+        btn.classList.add('active');
     }
-  });
 
-  webhooks.forEach((webhook, i) => {
-    fetch(webhook, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        embeds: [{
-          title: `📋 ${title.toUpperCase()}`,
-          color: colors[i] || 16711680,
-          fields: fields,
-          timestamp: new Date().toISOString(),
-          footer: {
-            text: "System Zarządzania PRM • Tablet v2.0",
-            icon_url: "https://i.imgur.com/ArY8ZUn.png"
-          }
-        }]
-      })
-    });
-  });
+    // Funkcja losująca dla laboratorium (Alkohol + Narkotyki)
+    function randomizeToxicology() {
+        // Losowanie alkoholu (80% szans na trzeźwość, 20% na upojenie)
+        const isDrunk = Math.random() > 0.8;
+        const alcInput = document.getElementById('lab_alkohol');
+        if (isDrunk) {
+            alcInput.value = (Math.random() * 4.5).toFixed(2) + " ‰";
+        } else {
+            alcInput.value = "0.00 ‰";
+        }
 
-  const successDiv = form.querySelector(".success");
-  successDiv.innerText = "✓ Raport wysłany pomyślnie";
-  document.getElementById("sendSound").play();
-  form.reset();
-  
-  setTimeout(() => { successDiv.innerText = ""; }, 5000);
-}
+        // Losowanie narkotyków
+        const drugSelect = document.getElementById('lab_narkotyki');
+        const options = drugSelect.options;
+        const randomChance = Math.random();
+        
+        if (randomChance > 0.85) {
+            // Wybierz losowy narkotyk z listy (omijając indeks 0, czyli wynik negatywny)
+            const randomIndex = Math.floor(Math.random() * (options.length - 1)) + 1;
+            drugSelect.selectedIndex = randomIndex;
+        } else {
+            // Wynik negatywny
+            drugSelect.selectedIndex = 0;
+        }
+    }
+
+    // Obsługa formularzy i webhooków
+    async function handleForm(event, webhooks, title, color) {
+        event.preventDefault();
+        const form = event.target;
+        let fields = [];
+
+        // Zbieranie danych z formularza
+        form.querySelectorAll('input, select, textarea').forEach(el => {
+            const label = el.previousElementSibling;
+            if (label && label.tagName === 'LABEL' && el.value.trim() !== '') {
+                
+                let valueText = el.value;
+                if (el.type === 'datetime-local') {
+                    valueText = valueText.replace('T', ' '); 
+                }
+
+                fields.push({
+                    name: `🔹 ${label.innerText}`,
+                    value: `**${valueText}**`,
+                    inline: el.tagName !== 'TEXTAREA' && valueText.length < 35
+                });
+            }
+        });
+
+        // Wysłanie wiadomości do każdego przypisanego webhooka
+        for (const url of webhooks) {
+            try {
+                await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        embeds: [{
+                            title: `🏥 DOKUMENTACJA HIS: ${title.toUpperCase()}`,
+                            color: color,
+                            fields: fields,
+                            timestamp: new Date().toISOString(),
+                            footer: { 
+                                text: "Szpital Wojewódzki w Gdańsku ・Summer RP",
+                                icon_url: "https://cdn-icons-png.flaticon.com/512/2966/2966327.png"
+                            }
+                        }]
+                    })
+                });
+            } catch (error) {
+                console.error("Błąd webhooka:", error);
+            }
+        }
+        
+        alert("Dokumentacja została zapisana w systemie i przesłana.");
+        form.reset();
+    }
+
+    // Zegar w prawym górnym rogu
+    setInterval(() => {
+        document.getElementById('clock').innerText = new Date().toLocaleTimeString('pl-PL');
+    }, 1000);
 </script>
-
-<div id="lek" class="tab active">
-<div class="card">
-<h2>Badania lekarskie</h2>
-<form onsubmit="sendForm(event,[W_LEK],'Badania lekarskie',[16711680])">
-<label>Imię i nazwisko pacjenta</label><input required>
-<label>Data urodzenia</label><input type="date" required>
-<label>Pesel / ID Roblox</label><input required>
-<label>Data badania</label><input type="date" required>
-<label>Miejsce badania</label><input required>
-<label>Osoba wykonująca</label><input required>
-<label>Stan zdrowia</label><textarea></textarea>
-<label>Wynik badania</label><select required><option>Pozytywny</option><option>Negatywny</option></select>
-<button class="send">ZATWIERDŹ RAPORT</button>
-<div class="success"></div>
-</form>
-</div>
-</div>
-
-<div id="mp" class="tab">
-<div class="card">
-<h2>Medycyna pracy</h2>
-<form onsubmit="sendForm(event,[W_MP],'Medycyna pracy',[65280])">
-<label>Imię i nazwisko pacjenta</label><input required>
-<label>Data urodzenia</label><input type="date" required>
-<label>Pesel / ID Roblox</label><input required>
-<label>Data badania</label><input type="date" required>
-<label>Miejsce badania</label><input required>
-<label>Osoba wykonująca</label><input required>
-<label>Stan zdrowia</label><textarea></textarea>
-<label>Wynik badania</label><select required><option>Pozytywny</option><option>Negatywny</option></select>
-<button class="send">ZATWIERDŹ RAPORT</button>
-<div class="success"></div>
-</form>
-</div>
-</div>
-
-<div id="psych" class="tab">
-<div class="card">
-<h2>Badania psychologiczne</h2>
-<form onsubmit="sendForm(event,[W_PSYCH1,W_PSYCH2],'Badania psychologiczne',[16776960,255])">
-<label>Imię i nazwisko pacjenta</label><input required>
-<label>Data urodzenia</label><input type="date" required>
-<label>Pesel / ID Roblox</label><input required>
-<label>Odporność na stres</label><select><option>Niska</option><option>Średnia</option><option>Wysoka</option></select>
-<label>Stabilność emocjonalna</label><select><option>Niska</option><option>Średnia</option><option>Wysoka</option></select>
-<label>Impulsywność</label><select><option>Tak</option><option>Nie</option></select>
-<label>Wynik</label><select required><option>Brak przeciwwskazań</option><option>Istnieją przeciwwskazania</option></select>
-<button class="send">ZATWIERDŹ RAPORT</button>
-<div class="success"></div>
-</form>
-</div>
-</div>
-
-<div id="kmcr" class="tab">
-<div class="card">
-<h2>KMCR</h2>
-<form onsubmit="sendForm(event,[W_KMCR],'KMCR',[16744448])">
-<label>Pacjent</label><input>
-<label>Rozpoznanie na miejscu</label><textarea></textarea>
-<label>Podane leki</label><textarea></textarea>
-<label>Decyzja zespołu</label><select><option>Przyjazd do szpitala</option><option>Pozostawienie na miejscu</option></select>
-<label>Dowódca zespołu</label><input>
-<button class="send">ZATWIERDŹ KMCR</button>
-<div class="success"></div>
-</form>
-</div>
-</div>
-
-<div id="dyzur" class="tab">
-<div class="card">
-<h2>Dyżury</h2>
-<form onsubmit="sendForm(event,[W_DYZUR],'Dyżury',[16711680])">
-<label>Imię i nazwisko</label><input>
-<label>Od której do której</label><input>
-<label>Podpis</label><input>
-<button class="send">WYŚLIJ STATUS</button>
-<div class="success"></div>
-</form>
-</div>
-</div>
-
-<div id="kontrola" class="tab">
-<div class="card">
-<h2>Kontrola pacjenta</h2>
-<form onsubmit="sendForm(event,[W_KONTROLA],'Kontrola pacjenta',[65280])">
-<label>Pacjent</label><input>
-<label>Wynik kontroli</label><textarea></textarea>
-<label>Lekarz kontrolujący</label><input>
-<button class="send">WYŚLIJ KONTROLĘ</button>
-<div class="success"></div>
-</form>
-</div>
-</div>
-
-<div id="akta" class="tab">
-<div class="card">
-<h2>Akta zgonów</h2>
-<form onsubmit="sendForm(event,[W_AKTA],'Akt zgonu',[16711935])">
-<label>Imię i nazwisko</label><input>
-<label>Data zgonu</label><input type="date">
-<label>Miejsce zgonu</label><input>
-<button class="send">WYSTAW AKT</button>
-<div class="success"></div>
-</form>
-</div>
-</div>
-
-<div id="sekcja" class="tab">
-<div class="card">
-<h2>Sekcja zwłok</h2>
-<form onsubmit="sendForm(event,[W_SEKCJE1,W_SEKCJE2],'Sekcja zwłok',[16711680,65280])">
-<label>Zmarły</label><input>
-<label>Wnioski końcowe</label><textarea></textarea>
-<button class="send">WYŚLIJ WYNIK</button>
-<div class="success"></div>
-</form>
-</div>
-</div>
-
-<div id="operacja" class="tab">
-<div class="card">
-<h2>Operacja</h2>
-<form onsubmit="sendForm(event,[W_OPERACJA],'Operacja',[16711680])">
-<label>Imię i Nazwisko Pacjenta</label><input>
-<label>Jaka operacja</label><input>
-<label>Przebieg operacji</label><textarea></textarea>
-<button class="send">WYŚLIJ RAPORT</button>
-<div class="success"></div>
-</form>
-</div>
-</div>
-
-<div id="skierowania" class="tab">
-<div class="card">
-<h2>Skierowania</h2>
-<form onsubmit="sendForm(event,[W_SKIER],'Skierowanie',[3447003])">
-<label>Imię i Nazwisko pacjenta</label><input>
-<label>Do</label><input>
-<label>Treść skierowania</label><textarea></textarea>
-<button class="send">WYSTAW SKIEROWANIE</button>
-<div class="success"></div>
-</form>
-</div>
-</div>
-
-<div id="zalecenia" class="tab">
-<div class="card">
-<h2>Zalecenia</h2>
-<form onsubmit="sendForm(event,[W_ZALEC],'Zalecenia',[5763719])">
-<label>Imię i Nazwisko pacjenta</label><input>
-<label>Zalecam</label><textarea></textarea>
-<button class="send">WYŚLIJ ZALECENIA</button>
-<div class="success"></div>
-</form>
-</div>
-</div>
 
 </body>
 </html>
